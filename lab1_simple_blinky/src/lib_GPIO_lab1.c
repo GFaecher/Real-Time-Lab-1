@@ -45,40 +45,23 @@ static int g_GPIO_pin[D13+1] = {
 ////////////////////////////////////////////////////////////////////
 
 #include <string.h>	// for strcmp().
-#ifdef USE_HAL
-static void MX_GPIO_Init(GPIO_TypeDef *port, uint16_t pin) {
-    // YOU GET TO WRITE THIS FUNCTION OR TAKE IT FROM CubeMX
-    // This is a function that CubeMX will write for you, if you use CubeMX.
-    // You can just take the version that CubeMX writes, or write it yourself.
-    // You'll need it because the USE_HAL version of pinMode (which we supply
-    // for you just below) uses it.
-}
 
-void pinMode(enum Pin Nano_pin, char *mode) {
-    GPIO_TypeDef *gpio = g_GPIO_port[Nano_pin];
-    unsigned int pin   = g_GPIO_pin [Nano_pin];
-
-    if (strcmp (mode, "OUTPUT")==0) {
-	MX_GPIO_Init(gpio, 1<<pin);
-    } else if (strcmp (mode, "INPUT")==0) {
-    } else if (strcmp (mode, "INPUT_PULLUP")==0) {
-    } else error("Illegal mode to pinMode()");
-}
-void digitalWrite (enum Pin Nano_pin, bool value) {
-    // YOU GET TO WRITE THIS FUNCTION.
-    // ... hint... use HAL_GPIO_WritePin().
-}
-#else
 // Ignore "mode" for this lab, and just assume it's always "OUTPUT".
 void pinMode(enum Pin pin, char *mode) {
-    // YOU GET TO WRITE THIS FUNCTION.
-    // Enable the pin's port & set the pin to be an output, by writing the
-    // correct CSRs.
+    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
+    GPIOB->MODER &= ~(0x3<< g_GPIO_pin[pin*2]);
+    GPIOB->MODER |= (0x1<< g_GPIO_pin[pin*2]);
+    
 }
 void digitalWrite (enum Pin pin, bool value) {
-    // YOU GET TO WRITE THIS FUNCTION.
+    GPIOB->OTYPER &= ~(0x1 << g_GPIO_pin[pin]);
+    if (value) {
+        GPIOB->ODR |= (0x1 << g_GPIO_pin[pin]);
+    } else {
+        GPIOB->ODR &= ~(0x1 << g_GPIO_pin[pin]);
+    }
+    GPIOB->OSPEEDR &= ~(0x3 << g_GPIO_pin[pin*2]);
 }
-#endif
 
 bool digitalRead (enum Pin pin) {
     // Not written yet.
