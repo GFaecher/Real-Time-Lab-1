@@ -48,19 +48,34 @@ static int g_GPIO_pin[D13+1] = {
 
 // Ignore "mode" for this lab, and just assume it's always "OUTPUT".
 void pinMode(enum Pin pin, char *mode) {
-    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
-    GPIOB->MODER &= ~(0x3<< g_GPIO_pin[pin*2]);
-    GPIOB->MODER |= (0x1<< g_GPIO_pin[pin*2]);
+
+    if (g_GPIO_port[pin] == GPIOA) {
+        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+        GPIOA->MODER &= ~(0x3 << (g_GPIO_pin[pin] * 2));
+        GPIOA->MODER |= (0x1 << (g_GPIO_pin[pin] * 2));
+        GPIOA->OTYPER &= ~(0x1 << g_GPIO_pin[pin]);
+    }
+    else if (g_GPIO_port[pin] == GPIOB) {
+        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
+        GPIOB->MODER &= ~(0x3 << (g_GPIO_pin[pin] * 2));
+        GPIOB->MODER |= (0x1 << (g_GPIO_pin[pin] * 2));
+        GPIOB->OTYPER &= ~(0x1 << g_GPIO_pin[pin]);
+    }
+    else {
+        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;
+        GPIOC->MODER &= ~(0x3 << (g_GPIO_pin[pin] * 2));
+        GPIOC->MODER |= (0x1 << (g_GPIO_pin[pin] * 2));
+        GPIOC->OTYPER &= ~(0x1 << g_GPIO_pin[pin]);
+    }
     
 }
 void digitalWrite (enum Pin pin, bool value) {
-    GPIOB->OTYPER &= ~(0x1 << g_GPIO_pin[pin]);
     if (value) {
         GPIOB->ODR |= (0x1 << g_GPIO_pin[pin]);
     } else {
         GPIOB->ODR &= ~(0x1 << g_GPIO_pin[pin]);
     }
-    GPIOB->OSPEEDR &= ~(0x3 << g_GPIO_pin[pin*2]);
+    // GPIOB->OSPEEDR &= ~(0x3 << g_GPIO_pin[pin*2]);
 }
 
 bool digitalRead (enum Pin pin) {
