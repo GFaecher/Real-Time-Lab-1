@@ -91,7 +91,7 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   bool valueRed = 0;
-  bool valueGreen = 1;
+  bool valueGreen = 0;
   enum Pin red = D13;
   enum Pin green = D12;
   digitalWrite(green, valueGreen);
@@ -102,52 +102,52 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* Alternate Them */
-    digitalWrite (red, valueRed);
-    digitalWrite (green, valueGreen);
+    // /* Alternate Them */
+    // digitalWrite (red, valueRed);
+    // digitalWrite (green, valueGreen);
 
-    valueRed = !valueRed;
-    valueGreen = !valueGreen;
-    delay(500);
+    // valueRed = !valueRed;
+    // valueGreen = !valueGreen;
+    // delay(500);
 
     /* 2-3 Dance */
 
-    // // Turn green on 1st time at 167ms
-    // delay(167);
-    // digitalWrite(green, 1);
+    // Turn green on 1st time at 167ms
+    delay(167);
+    digitalWrite(green, 1);
 
-    // //turn red on 1st time at 250ms
-    // delay(83);
-    // digitalWrite(red, 1);
+    //turn red on 1st time at 250ms
+    delay(83);
+    digitalWrite(red, 1);
 
-    // //turn green off 1st time at 334ms
-    // delay(84);
-    // digitalWrite(green, 0);
+    //turn green off 1st time at 334ms
+    delay(84);
+    digitalWrite(green, 0);
 
-    // //turn red off 1st time at 500ms
-    // delay(166);
-    // digitalWrite(red, 0);
+    //turn red off 1st time at 500ms
+    delay(166);
+    digitalWrite(red, 0);
 
-    // //turn green on 2nd time at 501ms
-    // delay(1);
-    // digitalWrite(green, 1);
+    //turn green on 2nd time at 501ms
+    delay(1);
+    digitalWrite(green, 1);
 
-    // //turn green off 2nd time at 668ms
-    // delay(167);
-    // digitalWrite(green, 0);
+    //turn green off 2nd time at 668ms
+    delay(167);
+    digitalWrite(green, 0);
 
-    // //turn red on 2nd time at 750ms
-    // delay(82);
-    // digitalWrite(red, 1);
+    //turn red on 2nd time at 750ms
+    delay(82);
+    digitalWrite(red, 1);
 
-    // //turn green on 3rd time at 835ms
-    // delay(85);
-    // digitalWrite(green, 1);
+    //turn green on 3rd time at 835ms
+    delay(85);
+    digitalWrite(green, 1);
 
-    // //turn both off at 1 second
-    // delay(165);
-    // digitalWrite(green, 0);
-    // digitalWrite(red, 0);
+    //turn both off at 1 second
+    delay(165);
+    digitalWrite(green, 0);
+    digitalWrite(red, 0);
   
   }
 }
